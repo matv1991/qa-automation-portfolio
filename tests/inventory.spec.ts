@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/LoginPage';
+import { InventoryPage } from '../pages/InventoryPage';
 
 test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
@@ -9,12 +10,33 @@ test.beforeEach(async ({ page }) => {
 
 // cart tests
 test('user can add item to cart from product page', async ({ page }) => {
-  // write these as comments first
-  // then convert — you already know these locators
+
+  // GIVEN I am on the inventory page -- If I logged in correctly I assume I'm on this page already
+  // WHEN I click on the 'Add to cart' button of a product
+  // THEN the product is added to the cart
+  // AND the 'Add to cart' button is changed to 'Remove'
+  // AND the cart icon displays the correct amount of items added to it
+
+  const inventoryPage = new InventoryPage(page);
+  await inventoryPage.addItemToCart("sauce-labs-backpack");
+  await expect(page.locator('[data-test="remove-sauce-labs-backpack"]')).toBeVisible();
+  await expect(inventoryPage.cartBadge).toHaveText('1');
 });
 
 test('user can remove items from cart from product page', async ({ page }) => {
-  // write these as comments first
+
+  // GIVEN I am on the inventory page and have at least one item in my cart
+  // When I click on the 'Remove' button of the item added to my cart
+  // THEN the item is removed from my cart
+  // And the cart icon displays the correct amount of items added to it
+  // AND the 'Remove' button is changed to 'Add to cart'
+
+  const inventoryPage = new InventoryPage(page);
+  await inventoryPage.addItemToCart("sauce-labs-backpack");
+  await expect(page.locator('[data-test="remove-sauce-labs-backpack"]')).toBeVisible();
+  await expect(inventoryPage.cartBadge).toHaveText('1');
+  await inventoryPage.removeItemFromCart("sauce-labs-backpack");
+  await expect(inventoryPage.cartBadge).not.toBeVisible();
 });
 
 // sorting tests

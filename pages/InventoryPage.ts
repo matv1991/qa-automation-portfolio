@@ -1,38 +1,29 @@
-import { expect, type Locator, type Page } from '@playwright/test';
+import { type Locator, type Page } from '@playwright/test';
 
 export class InventoryPage {
   readonly page: Page;
-  readonly addButton locator
-  readonly removeButton locator
-  readonly cartIcon locator
-  readonly cartBadge locator
+  readonly addButton: Locator;
+  readonly removeButton: Locator;
+  readonly cartIcon: Locator;
+  readonly cartBadge: Locator;
 
   constructor(page: Page) {
     this.page = page;
-    this.addButton = page.locator('[data-test="username"]');
-    this.removeButton = page.locator('[data-test="password"]');
-    this.cartIcon = page.locator('[data-test="login-button"]');
-    this.cartBadge = page.locator('[data-test="error"]');
+    this.addButton = page.locator('[data-test^="add-to-cart"]');
+    this.removeButton = page.locator('[data-test^="remove"]');
+    this.cartIcon = page.locator('[data-test="shopping-cart-link"]');
+    this.cartBadge = page.locator('[data-test="shopping-cart-badge"]');
   }
 
-    async goto() {
-    await this.page.goto('https://www.saucedemo.com/');
+  async goto() {
+    await this.page.goto('/inventory.html');
   }
 
-  async login(username: string, password: string) {
-    await this.usernameInput.fill(username);
-    await this.passwordInput.fill(password);
-    await this.loginButton.click();
+  async addItemToCart(productName: string) {
+    await this.page.locator(`[data-test="add-to-cart-${productName}"]`).click();
   }
 
-  async clickLogin() {
-    await this.loginButton.click();
+  async removeItemFromCart(productName: string) {
+    await this.page.locator(`[data-test="remove-${productName}"]`).click();
   }
-
-  async assertAddedToCart(message: string) {
-    await 
-}
-
-  async assertRemovedFromCart(message: string) {
-    await 
 }
