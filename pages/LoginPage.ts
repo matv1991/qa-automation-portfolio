@@ -18,7 +18,7 @@ export class LoginPage {
   }
 
   async goto() {
-    await this.page.goto('https://www.saucedemo.com/');
+    await this.page.goto('/');
   }
 
   async login(username: string, password: string) {
@@ -33,5 +33,13 @@ export class LoginPage {
 
   async assertErrorMessage(message: string) {
     await expect(this.errorMessage).toHaveText(message);
+  }
+
+  async fillUsername(username: string) {
+    await this.usernameInput.fill(username);
+  } 
+
+async fillPassword(password: string) {
+  await this.passwordInput.fill(password);
   }
 }

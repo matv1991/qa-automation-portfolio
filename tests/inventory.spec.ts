@@ -51,8 +51,45 @@ test('user can sort items in alphabetic order', async ({ page }) => {
   expect(names).toEqual(sorted);
 });
 
-// leave these as empty shells for now — finish the ones above first
-test('user can sort items in reverse alphabetic order', async ({ page }) => {});
-test('user can sort items by ascending price', async ({ page }) => {});
-test('user can sort items by descending price', async ({ page }) => {});
-test('user can click on product name to visit product details page', async ({ page }) => {});
+
+test('user can sort items in reverse alphabetic order', async ({ page }) => {
+  // GIVEN I am on the inventory page
+  // WHEN I select 'Name (Z to A)' from the sort dropdown
+  // THEN the displayed items are sorted reverse alphabetically
+
+  await page.locator('[data-test="product-sort-container"]').selectOption('za');
+  const names = await page.locator('[data-test="inventory-item-name"]').allTextContents();
+  const sorted = [...names].sort((a, b) => b.localeCompare(a));
+  expect(names).toEqual(sorted);
+});
+
+test('user can sort items by ascending price', async ({ page }) => {
+  // GIVEN I am on the inventory page
+  // WHEN I select 'Price (low to high)' from the sort dropdown
+  // THEN the displayed items are sorted by ascending price
+
+  await page.locator('[data-test="product-sort-container"]').selectOption('lohi');
+  const price = await page.locator('[data-test="inventory-item-price"]').allTextContents();
+  const sorted = [...price].sort((a, b) => parseFloat(a.slice(1)) - parseFloat(b.slice(1)));
+  expect(price).toEqual(sorted);
+});
+
+test('user can sort items by descending price', async ({ page }) => {
+  // GIVEN I am on the inventory page
+  // WHEN I select 'Price (high to low)' from the sort dropdown
+  // THEN the displayed items are sorted by descending price
+
+  await page.locator('[data-test="product-sort-container"]').selectOption('hilo');
+  const price = await page.locator('[data-test="inventory-item-price"]').allTextContents();
+  const sorted = [...price].sort((a, b) => parseFloat(b.slice(1)) - parseFloat(a.slice(1)));
+  expect(price).toEqual(sorted);
+});
+
+test('user can click on product name to visit product details page', async ({ page }) => {
+// GIVEN I am on the inventory page
+// WHEN I click on an item in the list
+// THEN I am redirected to the corresponding details page
+
+await page.locator('[data-test="inventory-item-name"]').first().click();
+await expect(page).toHaveURL(/inventory-item/);
+});

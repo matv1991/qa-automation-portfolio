@@ -1,48 +1,68 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../pages/LoginPage';
 
 test('user can log in to Swag Labs', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  // GIVEN I am on the login page
+  // WHEN I enter a valid username and password
+  // AND I click the login button
+  // THEN I am redirected to the inventory page
 
-  await page.locator('[data-test="username"]').fill('standard_user');
-  await page.locator('[data-test="password"]').fill('secret_sauce');
-  await page.locator('[data-test="login-button"]').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('standard_user', 'secret_sauce');
 
   await expect(page).toHaveURL(/inventory/);
-  await expect(page.locator('[data-test="title"]')).toHaveText('Products');
+  await expect(loginPage.pageTitle).toHaveText('Products');
 });
 
 test('user sees error with invalid login', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  // GIVEN I am on the login page
+  // WHEN I enter an invalid username and password
+  // AND I click the login button
+  // THEN an error message is displayed
 
-  await page.locator('[data-test="username"]').fill('wrong_user');
-  await page.locator('[data-test="password"]').fill('wrong_password');
-  await page.locator('[data-test="login-button"]').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.login('wrong_user', 'wrong_password');
+  await loginPage.assertErrorMessage('Epic sadface: Username and password do not match any user in this service');
 
-  await expect(page.locator('[data-test="error"]')).toBeVisible();
 });
 
 test('user sees error when attempting to login with empty fields', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  // GIVEN I am on the login page
+  // WHEN I click the login button without entering credentials
+  // THEN an error message is displayed
 
-  await page.locator('[data-test="login-button"]').click();
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.clickLogin();
 
-  await expect(page.locator('[data-test="error"]')).toHaveText(
-    'Epic sadface: Username is required'
-  );
+  await loginPage.assertErrorMessage('Epic sadface: Username is required');
 });
 
 test('user sees error when attempting to login providing username only', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
-  
-  await page.locator('[data-test="username"]').fill('standard_user');
-  
-  await page.locator('[data-test="login-button"]').click();
+  // GIVEN I am on the login page
+  // WHEN I enter a valid username only
+  // AND I click the login button
+  // THEN an error message is displayed
 
-  await expect(page.locator('[data-test="error"]')).toHaveText(
-    'Epic sadface: Password is required'
-  );
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.fillUsername('standard_user');
+  await loginPage.clickLogin();
+  await loginPage.assertErrorMessage('Epic sadface: Password is required');
 });
 
 test('user sees error when attempting to login providing password only', async ({ page }) => {
-  await page.goto('https://www.saucedemo.com/');
+  // GIVEN I am on the login page
+  // WHEN I enter a valid password only
+  // AND I click the login button
+  // THEN an error message is displayed
+
+  const loginPage = new LoginPage(page);
+  await loginPage.goto();
+  await loginPage.fillPassword('secret_sauce');
+  await loginPage.clickLogin();
+
+  await loginPage.assertErrorMessage('Epic sadface: Username is required');
 });
