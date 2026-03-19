@@ -13,24 +13,29 @@ manual test case design and documents test intent alongside the automation code.
 
 - Login — happy path and negative scenarios
 - Inventory — add to cart, remove from cart, sorting
-- Checkout — full purchase flow and field validation (in progress)
+- Checkout — happy path purchase flow
 
 ## How to run
 
+Navigate into the project folder:
+```
+cd saucedemo
+```
+
 Install dependencies:
-\`\`\`
+```
 npm install
-\`\`\`
+```
 
 Run all tests:
-\`\`\`
+```
 npx playwright test
-\`\`\`
+```
 
 View test report:
-\`\`\`
+```
 npx playwright show-report
-\`\`\`
+```
 
 ## Tech stack
 
