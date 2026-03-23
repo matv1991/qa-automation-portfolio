@@ -18,7 +18,7 @@ test('user can log in to Swag Labs', {
 
   const loginPage = new LoginPage(page);
   await loginPage.goto();
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(process.env.TEST_USERNAME!, process.env.TEST_PASSWORD!);
 
   await expect(page).toHaveURL(/inventory/);
   await expect(loginPage.pageTitle).toHaveText('Products');

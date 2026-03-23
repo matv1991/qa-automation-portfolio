@@ -9,7 +9,7 @@ import { CheckoutCompletePage } from '../pages/CheckoutCompletePage';
 test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(process.env.TEST_USERNAME!, process.env.TEST_PASSWORD!);
   const inventoryPage = new InventoryPage(page);
   await inventoryPage.addItemToCart('sauce-labs-backpack');
 });

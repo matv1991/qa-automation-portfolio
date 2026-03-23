@@ -5,11 +5,13 @@ import { InventoryPage } from '../pages/InventoryPage';
 test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
   await loginPage.goto();
-  await loginPage.login('standard_user', 'secret_sauce');
+  await loginPage.login(process.env.TEST_USERNAME!, process.env.TEST_PASSWORD!);
 });
 
 // cart tests
-test('user can add item to cart from product page', async ({ page }) => {
+test('user can add item to cart from product page', {
+  tag: ['@smoke', '@regression']
+}, async ({ page }) => {
 
   // GIVEN I am on the inventory page -- If I logged in correctly I assume I'm on this page already
   // WHEN I click on the 'Add to cart' button of a product
@@ -23,7 +25,9 @@ test('user can add item to cart from product page', async ({ page }) => {
   await expect(inventoryPage.cartBadge).toHaveText('1');
 });
 
-test('user can remove items from cart from product page', async ({ page }) => {
+test('user can remove items from cart from product page', {
+  tag: ['@smoke', '@regression']
+}, async ({ page }) => {
 
   // GIVEN I am on the inventory page and have at least one item in my cart
   // When I click on the 'Remove' button of the item added to my cart
@@ -40,7 +44,9 @@ test('user can remove items from cart from product page', async ({ page }) => {
 });
 
 // sorting tests
-test('user can sort items in alphabetic order', async ({ page }) => {
+test('user can sort items in alphabetic order', {
+  tag: ['@regression']
+}, async ({ page }) => {
   // GIVEN I am on the inventory page
   // WHEN I select 'Name (A to Z)' from the sort dropdown
   // THEN the displayed items are sorted alphabetically
@@ -52,7 +58,9 @@ test('user can sort items in alphabetic order', async ({ page }) => {
 });
 
 
-test('user can sort items in reverse alphabetic order', async ({ page }) => {
+test('user can sort items in reverse alphabetic order', {
+  tag: ['@regression']
+}, async ({ page }) => {
   // GIVEN I am on the inventory page
   // WHEN I select 'Name (Z to A)' from the sort dropdown
   // THEN the displayed items are sorted reverse alphabetically
@@ -63,7 +71,9 @@ test('user can sort items in reverse alphabetic order', async ({ page }) => {
   expect(names).toEqual(sorted);
 });
 
-test('user can sort items by ascending price', async ({ page }) => {
+test('user can sort items by ascending price', {
+  tag: ['@regression']
+}, async ({ page }) => {
   // GIVEN I am on the inventory page
   // WHEN I select 'Price (low to high)' from the sort dropdown
   // THEN the displayed items are sorted by ascending price
@@ -74,7 +84,9 @@ test('user can sort items by ascending price', async ({ page }) => {
   expect(price).toEqual(sorted);
 });
 
-test('user can sort items by descending price', async ({ page }) => {
+test('user can sort items by descending price', {
+  tag: ['@regression']
+}, async ({ page }) => {
   // GIVEN I am on the inventory page
   // WHEN I select 'Price (high to low)' from the sort dropdown
   // THEN the displayed items are sorted by descending price
@@ -85,7 +97,9 @@ test('user can sort items by descending price', async ({ page }) => {
   expect(price).toEqual(sorted);
 });
 
-test('user can click on product name to visit product details page', async ({ page }) => {
+test('user can click on product name to visit product details page', {
+  tag: ['@regression']
+},async ({ page }) => {
 // GIVEN I am on the inventory page
 // WHEN I click on an item in the list
 // THEN I am redirected to the corresponding details page
