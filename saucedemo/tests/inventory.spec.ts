@@ -1,11 +1,8 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/LoginPage';
 import { InventoryPage } from '../pages/InventoryPage';
 
 test.beforeEach(async ({ page }) => {
-  const loginPage = new LoginPage(page);
-  await loginPage.goto();
-  await loginPage.login(process.env.TEST_USERNAME!, process.env.TEST_PASSWORD!);
+  await page.goto('/inventory.html');
 });
 
 // cart tests
