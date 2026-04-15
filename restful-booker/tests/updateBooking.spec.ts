@@ -1,4 +1,5 @@
 import { test, expect } from "./fixtures/fixtures";
+import { validateBookingSchema } from "./helpers/bookingSchema";
 
 test.describe("PUT /booking/:id", () => {
   let bookingId: number;
@@ -53,6 +54,7 @@ test.describe("PUT /booking/:id", () => {
     });
 
     const body = await response.json();
+    validateBookingSchema(body);
     expect(response.status()).toBe(200);
     expect(body.firstname).toBe(updatedBooking.firstname);
     expect(body.lastname).toBe(updatedBooking.lastname);

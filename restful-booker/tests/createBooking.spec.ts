@@ -1,4 +1,5 @@
 import { test, expect } from "./fixtures/fixtures";
+import { validateBookingSchema } from "./helpers/bookingSchema";
 
 test.describe("POST /booking", () => {
   test("creates a new booking and returns its ID", async ({
@@ -19,6 +20,7 @@ test.describe("POST /booking", () => {
       },
     });
     const body = await response.json();
+    validateBookingSchema(body.booking);
 
     expect(response.status()).toBe(200);
     expect(body).toHaveProperty("bookingid");
